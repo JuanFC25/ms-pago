@@ -9,5 +9,5 @@ public class MsPagoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MsPagoApplication.class, args);
 	}
-
+	
 }

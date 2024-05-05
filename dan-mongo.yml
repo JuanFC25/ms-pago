@@ -26,6 +26,13 @@ services:
       - mongo-dan
     networks:
       - mynetwork
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672" 
+      - "15672:15672"
+    networks:
+      - mynetwork
 networks:
   mynetwork:
     driver: bridge
