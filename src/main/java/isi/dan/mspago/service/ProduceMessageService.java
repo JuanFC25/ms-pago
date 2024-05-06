@@ -4,6 +4,8 @@ package isi.dan.mspago.service;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
+import isi.dan.mspago.config.ConfigureRabbitMq;
+
 @Service
 public class ProduceMessageService {
 
