@@ -36,7 +36,7 @@ public class PagoController {
             String pagoJson = objectMapper.writeValueAsString(pago);
             
             // Enviar el JSON a través de RabbitMQ
-            rabbitTemplate.convertAndSend("exchange.pedidos", "routingKey.pedidos", pagoJson);
+            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
             
             return "Pago en proceso.";
         } catch (JsonProcessingException e) {
