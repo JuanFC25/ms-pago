@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 import isi.dan.mspago.dto.PagoDtoForDecision;
+import isi.dan.mspago.dto.mensajeprocesado.MensajeProcesadoDto;
 
 @RestController
 @RequestMapping("api/pago")
@@ -57,7 +59,25 @@ public class PagoController {
 
     // Método para recibir la respuesta del microservicio de pedidos
     @RabbitListener(queues = "respuesta.pedidos")
-    public void recibirRespuestaPedido(String mensaje) {
-        System.out.println("Hola, mundo!");
+    public void recibirRespuestaPedido(String mensajeJson) {
+        try {
+            System.out.println("Respuesta recibida: " + mensajeJson);
+            
+            // Convertir el mensaje JSON a un objeto PagoDtoForDecision
+            MensajeProcesadoDto mensaje = objectMapper.readValue(mensajeJson, MensajeProcesadoDto.class);
+            
+            // Extraer la información relevante del objeto PagoDtoForDecision
+            String decision = mensaje.getDecision();
+            String numeroPedido = mensaje.getNumeroPedido();
+            String correoElectronico = mensaje.getEmail();
+
+            // Enviar un correo electrónico con la decisión de pago
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejar cualquier excepción que pueda ocurrir durante el procesamiento del mensaje
+        }
     }
 }
+    
+
