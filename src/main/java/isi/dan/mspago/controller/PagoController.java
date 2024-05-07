@@ -39,15 +39,6 @@ public class PagoController {
             
             // Enviar el JSON a través de RabbitMQ
             rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
-            rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
             
             return "Pago en proceso.";
         } catch (JsonProcessingException e) {
