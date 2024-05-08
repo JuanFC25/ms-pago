@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-
-import isi.dan.mspago.dto.PagoDtoForDecision;
+import isi.dan.mspago.dto.PagoDtoForDecision.PagoDtoForDecision;
 import isi.dan.mspago.dto.mensajeprocesado.MensajeProcesadoDto;
+import isi.dan.mspago.service.MailSenderService;
 
 @RestController
 @RequestMapping("api/pago")
@@ -28,12 +27,13 @@ import isi.dan.mspago.dto.mensajeprocesado.MensajeProcesadoDto;
 public class PagoController {
 
     private final RabbitTemplate rabbitTemplate;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final MailSenderService mailService;
 
     @Autowired
-    public PagoController(RabbitTemplate rabbitTemplate) {
+    public PagoController(RabbitTemplate rabbitTemplate, MailSenderService mailService) {
         this.rabbitTemplate = rabbitTemplate;
-        this.objectMapper = objectMapper;
+        this.mailService = mailService;
     }
 
     @PostMapping("/realizarPago")
@@ -42,10 +42,8 @@ public class PagoController {
         PagoDtoForDecision pago = new PagoDtoForDecision(idPedido, idUsuario, decision);
         
         try {
-            // Convertir el objeto a JSON
             String pagoJson = objectMapper.writeValueAsString(pago);
             
-            // Enviar el JSON a través de RabbitMQ
             rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
             
             HashMap<String, String> response = new HashMap<>();
@@ -54,7 +52,6 @@ public class PagoController {
             // return  new JSONObject()
             // "Pago en proceso."JSONParser();
         } catch (JsonProcessingException e) {
-            // Manejar cualquier excepción de procesamiento JSON
             e.printStackTrace();
             HashMap<String, String> response = new HashMap<>();
             response.put("message", "Pago en proceso.");
@@ -68,21 +65,19 @@ public class PagoController {
         try {
             System.out.println("Respuesta recibida: " + mensajeJson);
             
-            // Convertir el mensaje JSON a un objeto PagoDtoForDecision
             MensajeProcesadoDto mensaje = objectMapper.readValue(mensajeJson, MensajeProcesadoDto.class);
-            
-            // Extraer la información relevante del objeto PagoDtoForDecision
+        
             String decision = mensaje.getDecision();
             String idPedido = mensaje.getIdPedido();
             String correoElectronico = mensaje.getEmail();
 
-            // Enviar un correo electrónico con la decisión de pago
-            
+            mailService.sendNewMail(correoElectronico, "Tenemos noticias sobre el pedido "+idPedido, "El resultado fue: "+decision);
         } catch (Exception e) {
             e.printStackTrace();
-            // Manejar cualquier excepción que pueda ocurrir durante el procesamiento del mensaje
+            
         }
     }
+  
 }
     
 

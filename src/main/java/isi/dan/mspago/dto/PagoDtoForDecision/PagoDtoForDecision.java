@@ -1,4 +1,4 @@
-package isi.dan.mspago.dto;
+package isi.dan.mspago.dto.PagoDtoForDecision;
 
 public class PagoDtoForDecision {
     private String idPedido;
