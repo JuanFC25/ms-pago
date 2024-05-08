@@ -4,7 +4,7 @@ package isi.dan.mspago.dto.mensajeprocesado;
 
 public class MensajeProcesadoDto {
 
-    private String numeroPedido;
+    private String idPedido;
     private String emailCliente ;
     private String decision;
 
@@ -12,18 +12,18 @@ public class MensajeProcesadoDto {
         // Constructor vacío necesario para deserialización por Spring
     }
 
-    public MensajeProcesadoDto(String numeroPedido, String emailCliente, String decision) {
-        this.numeroPedido = numeroPedido;
+    public MensajeProcesadoDto(String idPedido, String emailCliente, String decision) {
+        this.idPedido = idPedido;
         this.emailCliente = emailCliente;
         this.decision = decision;
     }
 
-    public String getNumeroPedido() {
-        return numeroPedido;
+    public String getIdPedido() {
+        return idPedido;
     }
 
-    public void setNumeroPedido(String numeroPedido) {
-        this.numeroPedido = numeroPedido;
+    public void setIdPedido(String idPedido) {
+        this.idPedido = idPedido;
     }
 
     public String getEmail() {

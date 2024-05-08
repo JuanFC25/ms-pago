@@ -29,9 +29,9 @@ public class PagoController {
     }
 
     @PostMapping("/realizarPago")
-    public String realizarPago(@RequestParam String numeroPedido, @RequestParam Integer idUsuario, @RequestParam String decision) {
+    public String realizarPago(@RequestParam String idPedido, @RequestParam Integer idUsuario, @RequestParam String decision) {
           // Crear un nuevo objeto PagoDtoForDecision
-        PagoDtoForDecision pago = new PagoDtoForDecision(numeroPedido, idUsuario, decision);
+        PagoDtoForDecision pago = new PagoDtoForDecision(idPedido, idUsuario, decision);
         
         try {
             // Convertir el objeto a JSON
@@ -59,7 +59,7 @@ public class PagoController {
             
             // Extraer la información relevante del objeto PagoDtoForDecision
             String decision = mensaje.getDecision();
-            String numeroPedido = mensaje.getNumeroPedido();
+            String idPedido = mensaje.getIdPedido();
             String correoElectronico = mensaje.getEmail();
 
             // Enviar un correo electrónico con la decisión de pago
