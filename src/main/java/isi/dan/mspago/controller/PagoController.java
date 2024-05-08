@@ -1,8 +1,15 @@
 package isi.dan.mspago.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,13 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import isi.dan.mspago.dto.PagoDtoForDecision;
 import isi.dan.mspago.dto.mensajeprocesado.MensajeProcesadoDto;
 
 @RestController
 @RequestMapping("api/pago")
+@CrossOrigin(origins = "http://localhost:3001")
 public class PagoController {
 
     private final RabbitTemplate rabbitTemplate;
@@ -29,7 +37,7 @@ public class PagoController {
     }
 
     @PostMapping("/realizarPago")
-    public String realizarPago(@RequestParam String idPedido, @RequestParam Integer idUsuario, @RequestParam String decision) {
+    public HashMap<String, String>  realizarPago(@RequestParam String idPedido, @RequestParam Integer idUsuario, @RequestParam String decision) {
           // Crear un nuevo objeto PagoDtoForDecision
         PagoDtoForDecision pago = new PagoDtoForDecision(idPedido, idUsuario, decision);
         
@@ -40,11 +48,17 @@ public class PagoController {
             // Enviar el JSON a través de RabbitMQ
             rabbitTemplate.convertAndSend("pedidos", "pedidos", pagoJson);
             
-            return "Pago en proceso.";
+            HashMap<String, String> response = new HashMap<>();
+            response.put("message", "Pago en proceso.");
+            return response;
+            // return  new JSONObject()
+            // "Pago en proceso."JSONParser();
         } catch (JsonProcessingException e) {
             // Manejar cualquier excepción de procesamiento JSON
             e.printStackTrace();
-            return "Error al procesar el pago.";
+            HashMap<String, String> response = new HashMap<>();
+            response.put("message", "Pago en proceso.");
+            return response;
         }
     }
 
