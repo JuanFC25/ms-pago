@@ -23,7 +23,7 @@ import isi.dan.mspago.service.MailSenderService;
 
 @RestController
 @RequestMapping("api/pago")
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost")
 public class PagoController {
 
     private final RabbitTemplate rabbitTemplate;
@@ -53,6 +53,7 @@ public class PagoController {
             // "Pago en proceso."JSONParser();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            System.out.println(e);
             HashMap<String, String> response = new HashMap<>();
             response.put("message", "Pago en proceso.");
             return response;
